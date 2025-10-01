@@ -1,16 +1,23 @@
 package com.api.test;
 
-import static org.hamcrest.Matchers.*;
+import static com.api.constant.Role.FD;
+import static com.api.utils.ConfigManager.getProperty;
+import static io.restassured.RestAssured.given;
+import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInClasspath;
+import static org.hamcrest.Matchers.blankOrNullString;
+import static org.hamcrest.Matchers.containsInAnyOrder;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.everyItem;
+import static org.hamcrest.Matchers.greaterThanOrEqualTo;
+import static org.hamcrest.Matchers.lessThan;
+import static org.hamcrest.Matchers.not;
+import static org.hamcrest.Matchers.notNullValue;
+
 import org.testng.annotations.Test;
 
 import com.api.constant.Role;
 import com.api.utils.AuthTokenProvider;
-
-import static io.restassured.module.jsv.JsonSchemaValidator.*;
-
-import static com.api.utils.ConfigManager.*;
-
-import static io.restassured.RestAssured.*;
+import com.api.utils.SpecUtil;
 
 public class CountAPITest {
 	
@@ -18,19 +25,13 @@ public class CountAPITest {
 	public void verifyCountAPIResponse() {
 		
 		given()
-		.baseUri(getProperty("BASE_URL"))
-		.and()
-		.header("Authorization",AuthTokenProvider.getToken(Role.FD))
-		.log().uri()
-		.log().method()
-		.log().headers()
+		.spec(SpecUtil.requestSpecWithAuth(FD))
 		.when()
 		.get("dashboard/count")
 		.then()
-		.log().all()
-		.statusCode(200)
+		.spec(SpecUtil.responseSpec_OK())
 		.body("message",equalTo("Success"))
-		.time(lessThan(2000L))
+		
 		.body("data",notNullValue())
 		.body("data.size()",equalTo(3))
 		.body("data.count",everyItem(greaterThanOrEqualTo(0)))
@@ -42,17 +43,11 @@ public class CountAPITest {
 	
 	public void countAPTTest_MissingAuthToken() {
 		given()
-		.baseUri(getProperty("BASE_URL"))
-		.and()
-		.header("Authorization",AuthTokenProvider.getToken(Role.FD))
-		.log().uri()
-		.log().method()
-		.log().headers()
+		.spec(SpecUtil.requestSpec())
 		.when()
 		.get("dashboard/count")
 		.then()
-		.log().all()
-		.statusCode(401);
+		.spec(SpecUtil.responseSpec_TEXT(401));
 	}
 
 }
