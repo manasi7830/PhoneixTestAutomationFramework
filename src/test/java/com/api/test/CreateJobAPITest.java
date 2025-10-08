@@ -9,6 +9,7 @@ import static org.hamcrest.Matchers.startsWith;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import com.api.constant.Model;
@@ -24,29 +25,35 @@ import com.api.request.model.Customer;
 import com.api.request.model.CustomerAddress;
 import com.api.request.model.CustomerProduct;
 import com.api.request.model.Problems;
-import com.api.utils.SpecUtil;
+import static com.api.utils.SpecUtil.*;
 
 public class CreateJobAPITest {
+	private CreateJobPayload createJobPayload;
 	
-	@Test
+	@BeforeMethod(description="Creating createjob api request payload")
+	public void setup(){
+		
+		Customer custmer=new Customer("Manasi","Avachat","9767145100","","manasiavachat14@gmail.com","");
+		CustomerAddress customerAddress=new CustomerAddress("20B","Atria","HMTMain","HMT","Jalahalli","560089","India","Karnataka");
+		CustomerProduct customerProduct=new CustomerProduct(getTimeWithDaysAgo(10),"97381664897457","97381664897457","97381664897457",getTimeWithDaysAgo(10),Product.NEXUS_2.getCode(),Model.NEXUS_2_BLUE.getCode());
+		Problems problems = new Problems(Problem.POOR_BATTERY_LIFE.getCode(), "Battery issue");
+		List<Problems> problemList=new ArrayList<Problems>();
+		problemList.add(problems);
+		
+		createJobPayload=new CreateJobPayload(ServiceLocation.SERVICE_LOCATION_A.getCode(), Platform.FRONT_DESK.getCode(), Warranty_Status.IN_WARRANTY.getCode(), OEM.GOOGLE.getCode(), custmer, customerAddress, customerProduct, problemList);
+		
+	}
+	
+	@Test(description="Verifying if create job api is able to create Inwarrenty job",groups= {"api","smoke","regression"})
 	public void createJobAPITest(){
-		//Creating the CreateJobPayload object
-				Customer custmer=new Customer("Manasi","Avachat","9767145100","","manasiavachat14@gmail.com","");
-				CustomerAddress customerAddress=new CustomerAddress("20B","Atria","HMTMain","HMT","Jalahalli","560089","India","Karnataka");
-				CustomerProduct customerProduct=new CustomerProduct(getTimeWithDaysAgo(10),"97381664897457","97381664897457","97381664897457",getTimeWithDaysAgo(10),Product.NEXUS_2.getCode(),Model.NEXUS_2_BLUE.getCode());
-				Problems problems = new Problems(Problem.POOR_BATTERY_LIFE.getCode(), "Battery issue");
-				List<Problems> problemList=new ArrayList<Problems>();
-				problemList.add(problems);
-				
-				CreateJobPayload createJobPayload=new CreateJobPayload(ServiceLocation.SERVICE_LOCATION_A.getCode(), Platform.FRONT_DESK.getCode(), Warranty_Status.IN_WARRANTY.getCode(), OEM.GOOGLE.getCode(), custmer, customerAddress, customerProduct, problemList);
 		
 		given()
-		.spec(SpecUtil.requestSpecWithAuth(Role.FD, createJobPayload))
+		.spec(requestSpecWithAuth(Role.FD, createJobPayload))
 		.when()
 		.log().all()
 		.post("/job/create")
 		.then()
-		.spec(SpecUtil.responseSpec_OK())
+		.spec(responseSpec_OK())
 		.body(matchesJsonSchemaInClasspath("response-schema/CreateJobAPIResponseSchema.json"))
 		.body("message",equalTo("Job created successfully. "))
 		.body("data.mst_service_location_id",equalTo(1))
