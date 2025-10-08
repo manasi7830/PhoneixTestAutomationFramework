@@ -4,7 +4,7 @@ import static com.api.utils.ConfigManager.getProperty;
 import org.hamcrest.Matchers;
 
 import com.api.constant.Role;
-import com.api.pojo.UserCredentials;
+import com.api.request.model.UserCredentials;
 
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.builder.ResponseBuilder;
@@ -57,6 +57,23 @@ public static RequestSpecification requestSpecWithAuth(Role role) {
 	.setAccept(ContentType.JSON)
 	.setAccept(ContentType.JSON)
 	.addHeader("Authorization",AuthTokenProvider.getToken(role))
+	.log(LogDetail.URI)
+	.log(LogDetail.METHOD)
+	.log(LogDetail.HEADERS)
+	.log(LogDetail.BODY)
+	.build();
+	return requestSpecification;
+	
+}
+
+public static RequestSpecification requestSpecWithAuth(Role role, Object payload) {
+	RequestSpecification requestSpecification =new RequestSpecBuilder()
+	.setBaseUri(getProperty("BASE_URL"))
+	.setContentType(ContentType.JSON)
+	.setAccept(ContentType.JSON)
+	.setAccept(ContentType.JSON)
+	.addHeader("Authorization",AuthTokenProvider.getToken(role))
+	.setBody(payload)
 	.log(LogDetail.URI)
 	.log(LogDetail.METHOD)
 	.log(LogDetail.HEADERS)
