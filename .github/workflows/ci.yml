@@ -44,7 +44,7 @@ jobs:
              echo: "env=${{ github.event.input.env || 'qa'}}" >> $GITHUB_OUTPUT
         
     - name: Execute Test Automation Framework
-      run: mvn clean test -DsuiteXmlFile="${{ github.event.inputs.suiteXmlFile }}" -Denv="${{ github.event.inputs.env }}"
+      run: mvn clean test -DsuiteXmlFile="${{ steps.default.output.suiteXmlFile }}" -Denv="${{ steps.default.output.env }}"
 
     - name: Upload a Build Artifact
       if: always()
