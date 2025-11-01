@@ -3,36 +3,35 @@ package com.dataproviders.api.bean;
 import com.opencsv.bean.CsvBindByName;
 
 public class UserBean {
-	@CsvBindByName(column = "userName")
-	private String userName;
-	@CsvBindByName(column = "Password")
-	private String Password;
-	
+	@CsvBindByName(column = "username")
+	private String username;
+	@CsvBindByName(column = "password")
+
+	private String password;
+
 	public UserBean() {
-		
+
 	}
 
-	
-
-	public String getUserName() {
-		return userName;
+	public String getUsername() {
+		return username;
 	}
 
-	public void setUserName(String userName) {
-		this.userName = userName;
+	public void setUserName(String username) {
+		this.username = username;
 	}
 
 	public String getPassword() {
-		return Password;
+		return password;
 	}
 
 	public void setPassword(String password) {
-		Password = password;
+		this.password = password;
 	}
 
 	@Override
 	public String toString() {
-		return "UserPOJO [userName=" + userName + ", Password=" + Password + "]";
+		return "UserBean [username=" + username + ", password=" + password + "]";
 	}
 
 }
