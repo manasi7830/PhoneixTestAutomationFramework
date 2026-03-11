@@ -51,7 +51,12 @@ public class DataProviderUtils {
 	
 	@DataProvider(name = "LoginAPIJSONDataProvider", parallel = true)
 	public static Iterator<UserCredentials> LoginAPIJSONDataProvider() {
-		return JsonReaderUtil.loadJSON("testData/demo.json", UserCredentials[].class);
+		return JsonReaderUtil.loadJSON("testData/loginAPITestData.json", UserCredentials[].class);
+	}
+	
+	@DataProvider(name = "CreateJobAPIJSONDataProvider", parallel = true)
+	public static Iterator<CreateJobPayload> CreateJobAPIJSONDataProvider() {
+		return JsonReaderUtil.loadJSON("testData/CreateJobAPIData.json", CreateJobPayload[].class);
 	}
 
 }
