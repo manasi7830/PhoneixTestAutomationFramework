@@ -67,5 +67,10 @@
 			<version>5.4.1</version>
 			<scope>compile</scope>
 		</dependency>
+		<dependency>
+			<groupId>com.github.ozlerhakan</groupId>
+			<artifactId>poiji</artifactId>
+			<version>5.2.0</version>
+		</dependency>
 	</dependencies>
 </project>

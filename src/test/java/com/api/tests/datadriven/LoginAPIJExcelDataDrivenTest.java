@@ -23,11 +23,11 @@ public class LoginAPIJExcelDataDrivenTest {
 			groups= {"api","regression","smoke"},
 			dataProviderClass =com.dataproviders.DataProviderUtils.class ,
 			dataProvider = "LoginAPIExcelDataProvider")
-	public void loginTest(UserCredentials userCredentials) {
+	public void loginTest(UserBean userBean) {
 		
 		
 		given()
-		.spec(requestSpec(userCredentials))
+		.spec(requestSpec(userBean))
         .when()
 		.post("login")
 		.then()
