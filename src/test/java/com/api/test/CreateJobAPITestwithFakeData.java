@@ -68,6 +68,8 @@ public class CreateJobAPITestwithFakeData {
 				Assert.assertEquals(expectedCustomerData.email_id(), actualCustomerDataInDB.getEmail_id());
 				Assert.assertEquals(expectedCustomerData.mobile_number_alt(), actualCustomerDataInDB.getMobile_number_alt());
 				Assert.assertEquals(expectedCustomerData.email_id_alt(), actualCustomerDataInDB.getEmail_id_alt());
+				
+				
 
 	}
 

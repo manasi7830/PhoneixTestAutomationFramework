@@ -10,12 +10,13 @@ import com.api.request.model.Customer;
 import com.database.model.CustomerAddressDBModel;
 import com.database.model.CustomerDBModel;
 import com.database.model.CustomerProductDBModel;
+import com.database.model.JobHeadModel;
 
 public class DemoDaoRunner {
 
 	public static void main(String[] args) throws SQLException {
-	CustomerProductDBModel customerProductDBModel=CustomerProductDao.getProductInfoFromDB(260523);
-	System.out.println(customerProductDBModel);
+	JobHeadModel jobHeadModel=JobHeadDao.getDataFromJobHead(260495);
+	System.out.println(jobHeadModel);
 	}
 
 }

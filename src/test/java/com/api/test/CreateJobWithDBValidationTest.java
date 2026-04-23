@@ -31,9 +31,11 @@ import com.api.request.model.Problems;
 import com.database.dao.CustomerAddressDao;
 import com.database.dao.CustomerDao;
 import com.database.dao.CustomerProductDao;
+import com.database.dao.JobHeadDao;
 import com.database.model.CustomerAddressDBModel;
 import com.database.model.CustomerDBModel;
 import com.database.model.CustomerProductDBModel;
+import com.database.model.JobHeadModel;
 
 import io.restassured.response.Response;
 
@@ -47,7 +49,7 @@ public class CreateJobWithDBValidationTest {
 		
 		customer=new Customer("Manasi","Avachat","9767145100","","manasiavachat14@gmail.com","");
 		customerAddress=new CustomerAddress("20B","Atria","HMTMain","HMT","Jalahalli","560089","India","Karnataka");
-		customerProduct=new CustomerProduct(getTimeWithDaysAgo(10),"94381664997157","94381664997157","94381664997157",getTimeWithDaysAgo(10),Product.NEXUS_2.getCode(),Model.NEXUS_2_BLUE.getCode());
+		customerProduct=new CustomerProduct(getTimeWithDaysAgo(10),"94381784987255","94381784987255","94381784987255",getTimeWithDaysAgo(10),Product.NEXUS_2.getCode(),Model.NEXUS_2_BLUE.getCode());
 		Problems problems = new Problems(Problem.POOR_BATTERY_LIFE.getCode(), "Battery issue");
 		List<Problems> problemList=new ArrayList<Problems>();
 		problemList.add(problems);
@@ -97,13 +99,20 @@ public class CreateJobWithDBValidationTest {
 		Assert.assertEquals(customerAddressFromDB.getPincode(), customerAddress.pincode());
 		
 		int productID=response.then().extract().body().jsonPath().getInt("data.tr_customer_product_id");
-		CustomerProductDBModel customerProductDBData=CustomerProductDao.getProductInfoFromDB(customerId);
+		CustomerProductDBModel customerProductDBData=CustomerProductDao.getProductInfoFromDB(productID);
 		Assert.assertEquals(customerProductDBData.getImei1(),customerProduct.imei1());
 		Assert.assertEquals(customerProductDBData.getImei2(),customerProduct.imei2());
 		Assert.assertEquals(customerProductDBData.getSerial_number(),customerProduct.serial_number());
 		Assert.assertEquals(customerProductDBData.getDop(),customerProduct.dop());
 		Assert.assertEquals(customerProductDBData.getPopurl(),customerProduct.popurl());
 		Assert.assertEquals(customerProductDBData.getMst_model_id(),customerProduct.mst_model_id());
+		
+		JobHeadModel jobHeadDataFromDB= JobHeadDao.getDataFromJobHead(customerId);
+		Assert.assertEquals(jobHeadDataFromDB.getMst_oem_id(), createJobPayload.mst_oem_id());
+		Assert.assertEquals(jobHeadDataFromDB.getMst_service_location_id(), createJobPayload.mst_service_location_id());
+		Assert.assertEquals(jobHeadDataFromDB.getMst_warrenty_status_id(), createJobPayload.mst_warrenty_status_id());
+		Assert.assertEquals(jobHeadDataFromDB.getMst_platform_id(), createJobPayload.mst_platform_id());
+		
 	}
 
 }
