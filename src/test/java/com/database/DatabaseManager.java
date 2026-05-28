@@ -6,14 +6,18 @@ import java.sql.SQLException;
 
 import com.api.utils.ConfigManager;
 import com.api.utils.EnvUtil;
+import com.api.utils.VaultDBConfig;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 
 public class DatabaseManager {
 
-	private static final String DB_URL = EnvUtil.getValue("DB_URL");
-	private static final String DB_USERNAME = EnvUtil.getValue("DB_USER_NAME");
-	private static final String DB_PASSWORD = EnvUtil.getValue("DB_PASSWORD");
+	private static boolean isVaultup = true;
+
+	private static final String DB_URL = loadSecret("DB_URL");
+	private static final String DB_USERNAME = loadSecret("DB_USER_NAME");
+	private static final String DB_PASSWORD = loadSecret("DB_PASSWORD");
+
 	private static final int MAXIMUM_POOL_SIZE = Integer.parseInt(ConfigManager.getProperty("MAXIMUM_POOL_SIZE"));
 	private static final int MINIMUM_IDLE_COUNT = Integer.parseInt(ConfigManager.getProperty("MINIMUM_IDLE_COUNT"));
 	private static final int CONNECTION_TIMEOUT_SEC = Integer
@@ -40,7 +44,7 @@ public class DatabaseManager {
 					hikariConfig.setPassword(DB_PASSWORD);
 					hikariConfig.setMaximumPoolSize(MAXIMUM_POOL_SIZE);
 					hikariConfig.setMinimumIdle(MINIMUM_IDLE_COUNT);
-					hikariConfig.setConnectionTimeout(CONNECTION_TIMEOUT_SEC*1000);
+					hikariConfig.setConnectionTimeout(CONNECTION_TIMEOUT_SEC * 1000);
 					hikariConfig.setIdleTimeout(IDEL_TIMEOUT_SEC * 1000);
 					hikariConfig.setMaxLifetime(MAX_LIFE_TIME_IN_MINS * 60 * 1000);
 					hikariConfig.setPoolName(HIKARI_CP_POOL_NAME);
@@ -63,5 +67,27 @@ public class DatabaseManager {
 		connection = hikariDataSource.getConnection();
 
 		return connection;
+	}
+
+	public static String loadSecret(String key) {
+		String value = null;
+		// value will get its value either from Vault or Env
+
+		if (isVaultup) {
+			value = VaultDBConfig.getSecret(key);
+
+			if (value == null) {
+				System.err.println("Vault is down or some issue with vault");
+				isVaultup = false;
+			} else {
+				System.out.println("READING VALUE FROM VAULT...........");
+				return value;
+			}
+		}
+		// We need to pick up data from Env!
+		System.out.println("READING VALUE FROM ENV..........");
+		value = EnvUtil.getValue(key);
+		return value;
+
 	}
 }
