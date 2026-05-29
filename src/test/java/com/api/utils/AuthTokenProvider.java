@@ -59,7 +59,7 @@ public class AuthTokenProvider {
 			.jsonPath()
 			.getString("data.token");
 			
-		
+		System.out.println();
 		tokenCache.put(role, token);
 		return token;
 			
