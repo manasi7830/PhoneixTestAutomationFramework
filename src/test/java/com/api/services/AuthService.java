@@ -3,8 +3,6 @@ package com.api.services;
 import static com.api.utils.SpecUtil.requestSpec;
 import static io.restassured.RestAssured.given;
 
-import com.api.request.model.UserCredentials;
-
 import io.restassured.response.Response;
 
 public class AuthService {
@@ -13,7 +11,7 @@ public class AuthService {
 	
 	private static final String LONGIN_ENDPOINT="login";
 	
-	public Response login(UserCredentials userCredentials ) {
+	public Response login(Object userCredentials ) {
 		
 		Response response=given()
 		.spec(requestSpec(userCredentials))
