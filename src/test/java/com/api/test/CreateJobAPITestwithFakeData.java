@@ -28,6 +28,7 @@ import com.api.request.model.Customer;
 import com.api.request.model.CustomerAddress;
 import com.api.request.model.CustomerProduct;
 import com.api.request.model.Problems;
+import com.api.services.JobService;
 import com.api.utils.DateTimeUtil;
 import com.api.utils.FakerDataGenerator;
 import com.database.dao.CustomerDao;
@@ -37,15 +38,18 @@ import com.github.javafaker.Faker;
 import static com.api.utils.SpecUtil.*;
 
 public class CreateJobAPITestwithFakeData {
+	
+	private JobService jobService;
 	private CreateJobPayload createJobPayload;
 	private final static String COUNTRY = "India";
 
-	@BeforeMethod(description = "Creating createjob api request payload")
+	@BeforeMethod(description = "Creating createjob api request payload and instantiating the JobService")
 	public void setup() {
 
 		
 
 		createJobPayload = FakerDataGenerator.generateFakeCreateJobData();
+		jobService=new JobService();
 
 	}
 
@@ -53,7 +57,7 @@ public class CreateJobAPITestwithFakeData {
 			"regression" })
 	public void createJobAPITest() {
 
-		int customerID=given().spec(requestSpecWithAuth(Role.FD, createJobPayload)).when().log().all().post("/job/create").then()
+		int customerID=jobService.createJob(Role.FD, createJobPayload).then()
 				.spec(responseSpec_OK())
 				.body(matchesJsonSchemaInClasspath("response-schema/CreateJobAPIResponseSchema.json"))
 				.body("message", equalTo("Job created successfully. ")).body("data.mst_service_location_id", equalTo(1))
