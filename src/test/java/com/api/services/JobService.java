@@ -12,12 +12,22 @@ public class JobService {
 	
 	private static final String CREATE_JOB_ENDPOINT="/job/create";
 	
+	private static final String SEARCH_ENDPOINT="/job/search";
+	
 	public Response createJob(Role role,CreateJobPayload createJobPayload) {
 
 		return given()
 		.spec(requestSpecWithAuth(Role.FD, createJobPayload))
 		.when()
 		.post(CREATE_JOB_ENDPOINT);
+	}
+	public Response search(Role role,Object payload) {
+
+		return given()
+		.spec(requestSpecWithAuth(Role.FD))
+		.body(payload)
+		
+		.post(SEARCH_ENDPOINT);
 	}
 
 }
