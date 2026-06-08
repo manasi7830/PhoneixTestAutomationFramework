@@ -10,6 +10,7 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import com.api.request.model.UserCredentials;
+import com.api.services.AuthService;
 import com.dataproviders.api.bean.UserBean;
 
 import static com.api.utils.SpecUtil.*;
@@ -17,29 +18,20 @@ import static com.api.utils.SpecUtil.*;
 import static io.restassured.module.jsv.JsonSchemaValidator.*;
 
 public class LoginAPIDataDrivenTest {
-		
-	
-	@Test(description="Verifying if login api is working for FD user", 
-			groups= {"api","regression","smoke"},
-			dataProviderClass =com.dataproviders.DataProviderUtils.class ,
-			dataProvider = "LoginAPIDataProvider")
+	private AuthService authService;
+
+	@BeforeMethod(description = "Initializing the Auth Service")
+	public void setup() {
+		authService = new AuthService();
+	}
+
+	@Test(description = "Verifying if login api is working for FD user", groups = { "api", "regression",
+			"smoke" }, dataProviderClass = com.dataproviders.DataProviderUtils.class, dataProvider = "LoginAPIDataProvider")
 	public void loginTest(UserBean userbean) {
-		
-		
-		given()
-		.spec(requestSpec(userbean))
-        .when()
-		.post("login")
-		.then()
-		.spec(responseSpec_OK())
-		.and()
-		.body("message",equalTo("Success"))
-		.and()
-		.body(matchesJsonSchemaInClasspath("response-schema/loginResponseSchema.json"));
-		
-		
-		
-		
+
+		authService.login(userbean).then().spec(responseSpec_OK()).and().body("message", equalTo("Success")).and()
+				.body(matchesJsonSchemaInClasspath("response-schema/loginResponseSchema.json"));
+
 	}
 
 }

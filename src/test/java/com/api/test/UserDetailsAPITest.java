@@ -5,7 +5,10 @@ import static org.hamcrest.Matchers.lessThan;
 
 import java.io.IOException;
 
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
+
+import com.api.services.UserService;
 
 import static com.api.utils.SpecUtil.*;
 
@@ -19,17 +22,20 @@ import io.restassured.http.ContentType;
 import io.restassured.http.Header;
 import static io.restassured.module.jsv.JsonSchemaValidator.*;
 
-@Test(description="Verify if the user detail API response is shown correctly",groups= {"api","smoke","regression"})
+
 public class UserDetailsAPITest {
 	
+	private UserService userService;
+	
+	@BeforeMethod(description="Setting up the UserService instance")
+	public void setup() {
+		userService=new UserService();
+	}
+	
+	@Test(description="Verify if the user detail API response is shown correctly",groups= {"api","smoke","regression"})
 	public void userDetailsAPITest() throws IOException {
 		
-		
-		
-		given()
-		.spec(requestSpecWithAuth(FD))
-		.when()
-		.get("userdetails")
+		userService.userDetails(FD)
 		.then()
 		.spec(responseSpec_OK())
 		.and()
