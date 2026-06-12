@@ -8,16 +8,21 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import static com.api.constant.Role.*;
 
 import com.api.constant.Role;
 import com.api.request.model.UserCredentials;
+import com.api.services.JobService;
 
 import io.restassured.http.ContentType;
 
 public class AuthTokenProvider {
 	
 	private static Map<Role,String> tokenCache=new ConcurrentHashMap<Role,String>();
+	private static final Logger LOGGER=  LogManager.getLogger(AuthTokenProvider.class);
 	
 	private AuthTokenProvider() {
 		
@@ -26,10 +31,12 @@ public class AuthTokenProvider {
 
 	public static String getToken(Role role) {
 		
+		LOGGER.info("Checking if the token for {} is present in the cache", role);
 		if(tokenCache.containsKey(role)){
+			LOGGER.info("token found for {} ", role);
 			return tokenCache.get(role);
 		}
-				
+		LOGGER.info("token not found making the loging request for the role{}",role);
 
 		UserCredentials userCredentials=null;
 		
@@ -59,7 +66,7 @@ public class AuthTokenProvider {
 			.jsonPath()
 			.getString("data.token");
 			
-		System.out.println();
+		LOGGER.info("Token cached for future request");
 		tokenCache.put(role, token);
 		return token;
 			
