@@ -7,6 +7,7 @@ import static org.hamcrest.Matchers.equalTo;
 import java.io.IOException;
 
 import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
 
 import com.api.request.model.UserCredentials;
@@ -15,6 +16,8 @@ import com.dataproviders.api.bean.UserBean;
 
 import io.restassured.response.Response;
 
+
+@Listeners(com.listeners.APITestListeners.class)
 public class LoginAPITest {
 	
 	private UserBean userCreds;
