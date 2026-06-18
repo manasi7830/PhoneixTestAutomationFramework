@@ -45,7 +45,7 @@ public class APITestListeners implements ITestListener {
 
 		  
 		  public  void onFinish(ITestContext context) {
-			  LOGGER.info("******************FINSH******************");
+			  LOGGER.info("******************FINSH********************");
 		  }
 
 }
