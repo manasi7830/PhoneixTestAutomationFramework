@@ -7,10 +7,15 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import com.database.DatabaseManager;
 import com.dataproviders.api.bean.CreateJobBean;
 
 public class CreateJobPayloadDataDao {
+
+	private static final Logger LOGGER = LogManager.getLogger(DatabaseManager.class);
 
 	private static final String SQL_QUERY = """
 								SELECT
@@ -56,18 +61,22 @@ public class CreateJobPayloadDataDao {
 
 			LIMIT 5;
 								""";
+
 	private CreateJobPayloadDataDao() {
-		
+
 	}
+
 	public static List<CreateJobBean> getCreateJobPayLoadData() {
 		Connection conn = null;
 		Statement statement;
 		ResultSet resultSet = null;
-		List<CreateJobBean> beanList=new ArrayList<CreateJobBean>();
-		
+		List<CreateJobBean> beanList = new ArrayList<CreateJobBean>();
+
 		try {
+			LOGGER.info("Getting the connection from the Database Manager");
 			conn = DatabaseManager.getConnection();
 			statement = conn.createStatement();
+			LOGGER.info("Executing the SQL query {}", SQL_QUERY);
 			resultSet = statement.executeQuery(SQL_QUERY);
 			while (resultSet.next()) {
 				CreateJobBean bean = new CreateJobBean();
@@ -101,8 +110,12 @@ public class CreateJobPayloadDataDao {
 				beanList.add(bean);
 			}
 		} catch (SQLException e) {
+			LOGGER.error("Can not convert result set to the bean", e);
 
 			e.printStackTrace();
+		}
+		for (CreateJobBean b : beanList) {
+			System.out.println(b);
 		}
 		return beanList;
 

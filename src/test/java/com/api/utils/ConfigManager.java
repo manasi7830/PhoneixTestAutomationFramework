@@ -9,9 +9,12 @@ import java.util.Properties;
 
 import javax.management.RuntimeErrorException;
 
-public class ConfigManager {
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
-//WAP to read the properties file from src/test/resources/config/config.properties
+import com.api.services.JobService;
+
+public class ConfigManager {
 
 	private static Properties prop = new Properties();
 
@@ -19,29 +22,39 @@ public class ConfigManager {
 
 	private static String env;
 
+	private static final Logger LOGGER = LogManager.getLogger(ConfigManager.class);
+
 	private ConfigManager() {
-		// private constructor to restrict object creatin
+
 	}
 
 	static {
+		LOGGER.info("Reading env value passed from the terminal");
 
-		env = System.getProperty("env","qa");
-		env=env.toLowerCase().trim();
+		if (System.getProperty("env") == null) {
+			LOGGER.warn("Env variable is not set ....using qa as the env");
+		}
+		env = System.getProperty("env", "qa");
+		LOGGER.info("Running the test in the env {}", env);
+		env = env.toLowerCase().trim();
 
 		switch (env) {
 
-		case "dev"-> path = "config/config.dev.properties";
-			
-		case "qa"->path="config/config.qa.properties";
-			
-		case "uat"->path="config/config.uat.properties";
-		
-		default->path="config/config.properties";
+		case "dev" -> path = "config/config.dev.properties";
+
+		case "qa" -> path = "config/config.qa.properties";
+
+		case "uat" -> path = "config/config.uat.properties";
+
+		default -> path = "config/config.properties";
 		}
+		
+		LOGGER.info("Using the Properties file from the path{}",path);
 
 		InputStream input = Thread.currentThread().getContextClassLoader().getResourceAsStream(path);
 
 		if (input == null) {
+			LOGGER.error("Cannot find the file at the path{}", path);
 			throw new RuntimeException("Can not find the file at path" + path);
 		}
 
@@ -49,9 +62,11 @@ public class ConfigManager {
 
 			prop.load(input);
 		} catch (FileNotFoundException e) {
+			LOGGER.error("Cannot find the file at the path{}", path,e);
 
 			e.printStackTrace();
 		} catch (IOException e) {
+			LOGGER.error("Something went wrong ....please check the file {}", path,e);
 
 			e.printStackTrace();
 		}

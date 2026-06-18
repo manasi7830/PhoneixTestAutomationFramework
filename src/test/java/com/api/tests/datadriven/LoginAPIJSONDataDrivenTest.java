@@ -31,7 +31,7 @@ private AuthService authService;
 			groups= {"api","regression","smoke"},
 			dataProviderClass =com.dataproviders.DataProviderUtils.class ,
 			dataProvider = "LoginAPIJSONDataProvider")
-	public void loginTest(UserCredentials userCredentials) {
+	public void loginTest(UserBean userCredentials) {
 		
 		
 		authService.login(userCredentials)
