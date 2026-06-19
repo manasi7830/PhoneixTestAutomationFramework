@@ -4,6 +4,7 @@ import static com.api.utils.ConfigManager.getProperty;
 import org.hamcrest.Matchers;
 
 import com.api.constant.Role;
+import com.api.filters.SensitiveDataFilters;
 import com.api.request.model.UserCredentials;
 
 import io.restassured.builder.RequestSpecBuilder;
@@ -34,13 +35,14 @@ public class SpecUtil {
 	
 	//POST-PUT-PATCH{BODY}
 	
-public static RequestSpecification requestSpec(Object userCreds) {
+public static RequestSpecification requestSpec(Object payload) {
 		
 		RequestSpecification requestSpecification =new RequestSpecBuilder()
 		.setBaseUri(getProperty("BASE_URL"))
 		.setContentType(ContentType.JSON)
 		.setAccept(ContentType.JSON)
-		.setBody(userCreds)
+		.setBody(payload)
+		.addFilter(new SensitiveDataFilters())
 		.log(LogDetail.URI)
 		.log(LogDetail.METHOD)
 		.log(LogDetail.HEADERS)
