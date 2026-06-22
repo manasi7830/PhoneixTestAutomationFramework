@@ -12,6 +12,7 @@ import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.notNullValue;
 
 import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
 
 import com.api.request.model.UserCredentials;
@@ -19,7 +20,7 @@ import com.api.services.AuthService;
 import com.api.services.DashboardService;
 
 import static com.api.utils.SpecUtil.*;
-
+@Listeners(com.listeners.APITestListeners.class)
 public class CountAPITest {
 
 	private DashboardService dashboardService;
