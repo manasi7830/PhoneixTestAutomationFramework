@@ -1,20 +1,69 @@
 package com.api.filters;
 
+import java.util.concurrent.TimeUnit;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import java.util.List;
+
 import io.restassured.filter.Filter;
 import io.restassured.filter.FilterContext;
+import io.restassured.http.Header;
 import io.restassured.response.Response;
 import io.restassured.specification.FilterableRequestSpecification;
 import io.restassured.specification.FilterableResponseSpecification;
 
 public class SensitiveDataFilters implements Filter {
 
+	private static final Logger LOGGER = LogManager.getLogger(SensitiveDataFilters.class);
+
 	@Override
 	public Response filter(FilterableRequestSpecification requestSpec, FilterableResponseSpecification responseSpec,
 			FilterContext ctx) {
-		System.out.println("-------------------HELLO FROM FILTERS--------------------------------");
-		Response response=ctx.next(requestSpec, responseSpec);
-		System.out.println("----------------------I got the response in the filter--------------------");
+
+		LOGGER.info("*****************REQUEST DETAILS***********************************");
+		LOGGER.info("BASE URi: {}", requestSpec.getURI());
+		LOGGER.info("HTTP METHOD: {}", requestSpec.getMethod());
+		redactHeader(requestSpec);
+
+		redactPayload(requestSpec);
+		Response response = ctx.next(requestSpec, responseSpec);
+		LOGGER.info("*****************RESPONSE DETAILS***********************************");
+		LOGGER.info("STATUS {}", response.getStatusLine());
+		LOGGER.info("RESPONSE TIME ms: {}", response.timeIn(TimeUnit.MICROSECONDS));
+		LOGGER.info("RESPONSE HEADERS: \n {}", response.getHeaders());
+		redactResponseBody(response);
 		return response;
+	}
+
+	private void redactHeader(FilterableRequestSpecification requestSpec) {
+		List<Header> headerList = requestSpec.getHeaders().asList();
+		for (Header h : headerList) {
+			if (h.getName().equalsIgnoreCase("Authorization")) {
+				LOGGER.info("HEADER {} : : {}",h.getName() ,"\"[REDACTED]\"");
+			}
+
+			else {
+					LOGGER.info("HEADER {} : : {}",h.getName(),h.getValue());
+
+			}
+		}
+
+	}
+
+	private void redactResponseBody(Response response) {
+		String responseBody = response.asPrettyString();
+		responseBody = responseBody.replaceAll("\"token\"\s*:\s*\"[^\"]+\"", "\"token	\":\"[REDACTED]\"");
+		LOGGER.info("RESPONSE BODY : {}\n ", responseBody);
+	}
+
+	public void redactPayload(FilterableRequestSpecification requestSpec) {
+		if (requestSpec.getBody() != null) {
+			String requestPayload = requestSpec.getBody().toString();
+			requestPayload = requestPayload.replaceAll("\"password\"\s*:\s*\"[^\"]+\"", "\"password\":\"[REDACTED]\"");
+			LOGGER.info("REQUEST PAYLOAD : {}\n ", requestPayload);
+		}
+
 	}
 
 }
