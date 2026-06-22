@@ -6,6 +6,7 @@ import static org.hamcrest.Matchers.lessThan;
 import java.io.IOException;
 
 import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
 
 import com.api.services.UserService;
@@ -21,9 +22,10 @@ import  static com.api.utils.ConfigManager.*;
 import io.restassured.http.ContentType;
 import io.restassured.http.Header;
 import static io.restassured.module.jsv.JsonSchemaValidator.*;
-
+@Listeners(com.listeners.APITestListeners.class)
 
 public class UserDetailsAPITest {
+	
 	
 	private UserService userService;
 	
