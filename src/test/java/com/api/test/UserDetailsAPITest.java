@@ -1,7 +1,8 @@
 package com.api.test;
 
-import static io.restassured.RestAssured.given;
-import static org.hamcrest.Matchers.lessThan;
+import static com.api.constant.Role.FD;
+import static com.api.utils.SpecUtil.responseSpec_OK;
+import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInClasspath;
 
 import java.io.IOException;
 
@@ -11,17 +12,14 @@ import org.testng.annotations.Test;
 
 import com.api.services.UserService;
 
-import static com.api.utils.SpecUtil.*;
-
-import static com.api.constant.Role.*;
-
-import static com.api.utils.AuthTokenProvider.*;
-
-import  static com.api.utils.ConfigManager.*;
-
-import io.restassured.http.ContentType;
-import io.restassured.http.Header;
-import static io.restassured.module.jsv.JsonSchemaValidator.*;
+import io.qameta.allure.Description;
+import io.qameta.allure.Epic;
+import io.qameta.allure.Feature;
+import io.qameta.allure.Severity;
+import io.qameta.allure.SeverityLevel;
+import io.qameta.allure.Story;
+@Epic("User Management")
+@Feature("User Details")
 @Listeners(com.listeners.APITestListeners.class)
 
 public class UserDetailsAPITest {
@@ -34,6 +32,9 @@ public class UserDetailsAPITest {
 		userService=new UserService();
 	}
 	
+	@Story("UserDetails should be shown")
+	@Description("UserDetails should be shown")
+	@Severity(SeverityLevel.CRITICAL)
 	@Test(description="Verify if the user detail API response is shown correctly",groups= {"api","smoke","regression"})
 	public void userDetailsAPITest() throws IOException {
 		

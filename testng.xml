@@ -7,7 +7,9 @@
       <class name="com.api.test.LoginAPITest"/>
       <class name="com.api.test.UserDetailsAPITest"/>
       <class name="com.api.test.CountAPITest"/>
+      <class name="com.api.test.DetailsAPITest"/>
       <class name="com.api.test.MasterAPITest"/>
+      <class name="com.api.test.CreateJobAPITest"/>
       <class name="com.api.test.CreateJobWithDBValidationTest"/>
       <class name="com.api.test.CreateJobWithDBValidationWithResponseModelTest"/>
     </classes>
