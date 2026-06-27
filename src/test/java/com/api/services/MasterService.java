@@ -1,6 +1,5 @@
 package com.api.services;
 
-import static com.api.constant.Role.FD;
 import static com.api.utils.SpecUtil.requestSpecWithAuth;
 import static io.restassured.RestAssured.given;
 
@@ -9,12 +8,15 @@ import org.apache.logging.log4j.Logger;
 
 import com.api.constant.Role;
 
+import io.qameta.allure.Step;
 import io.restassured.response.Response;
 
-public class MasterService {
 
+public class MasterService {
+	
 	private static String MASTER_ENDPOINT="master";
 	private static final Logger LOGGER=  LogManager.getLogger(MasterService.class);
+	@Step("Making Master API request")
 	public Response master(Role role) {
 		LOGGER.info("Making request to {} for the role {}",MASTER_ENDPOINT,role);
 		return given()

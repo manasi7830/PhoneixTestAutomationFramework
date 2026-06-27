@@ -2,21 +2,17 @@ package com.api.utils;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.xssf.usermodel.XSSFCell;
-import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
-import com.api.request.model.UserCredentials;
-import com.dataproviders.api.bean.UserBean;
 import com.poiji.bind.Poiji;
+
+import io.qameta.allure.Step;
 
 public class ExcelReaderUtil {
 	private static final Logger LOGGER=  LogManager.getLogger(ExcelReaderUtil.class);
@@ -24,6 +20,8 @@ public class ExcelReaderUtil {
 	private ExcelReaderUtil(){
 		
 	}
+	
+	@Step("Loading the test data from the excel file ")
 
 	public static  <T> Iterator<T> loadTestData(String xlsxFile,String sheetName,Class<T> clazz)  {
 		LOGGER.info("Readig the test data from the .xlsx file {} and the sheet name is {}",xlsxFile,sheetName);
