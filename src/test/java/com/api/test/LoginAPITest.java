@@ -39,7 +39,7 @@ public class LoginAPITest {
 	@Story("Valid user should be abale to login to the system ")
 	@Description("Verify if FD user is able to login via API")
 	@Severity(SeverityLevel.BLOCKER)
-	@Test(description="Verifying if login api is working for FD user", groups= {"api","regression","smoke"})
+	@Test(description="Verifying if login api is working for FD user", groups= {"api","regression","smoke"},retryAnalyzer = com.api.retry.RetryAnalyzer.class)
 	public void loginTest() throws IOException {
 		
 		
