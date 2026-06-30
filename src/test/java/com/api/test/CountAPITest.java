@@ -19,8 +19,17 @@ import com.api.request.model.UserCredentials;
 import com.api.services.AuthService;
 import com.api.services.DashboardService;
 
+import io.qameta.allure.Description;
+import io.qameta.allure.Epic;
+import io.qameta.allure.Feature;
+import io.qameta.allure.Severity;
+import io.qameta.allure.SeverityLevel;
+import io.qameta.allure.Story;
+
 import static com.api.utils.SpecUtil.*;
 @Listeners(com.listeners.APITestListeners.class)
+@Epic("Job Management")
+@Feature("Job Count")
 public class CountAPITest {
 
 	private DashboardService dashboardService;
@@ -29,6 +38,10 @@ public class CountAPITest {
 	public void setup() {
 		dashboardService = new DashboardService();
 	}
+	
+	@Story("Job Count Detail is shown correctly ")
+	@Description("Verifying if count api is giving correct response")
+	@Severity(SeverityLevel.CRITICAL)
 
 	@Test(description = "Verifying if count api is giving correct response", groups = { "api", "smoke", "regression" })
 	public void verifyCountAPIResponse() {

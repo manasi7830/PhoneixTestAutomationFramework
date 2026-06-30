@@ -13,6 +13,8 @@ import org.apache.logging.log4j.Logger;
 import com.database.DatabaseManager;
 import com.dataproviders.api.bean.CreateJobBean;
 
+import io.qameta.allure.Step;
+
 public class CreateJobPayloadDataDao {
 
 	private static final Logger LOGGER = LogManager.getLogger(DatabaseManager.class);
@@ -65,7 +67,7 @@ public class CreateJobPayloadDataDao {
 	private CreateJobPayloadDataDao() {
 
 	}
-
+	@Step("Retriviting the CreateJob Payload Data from Database")
 	public static List<CreateJobBean> getCreateJobPayLoadData() {
 		Connection conn = null;
 		Statement statement;

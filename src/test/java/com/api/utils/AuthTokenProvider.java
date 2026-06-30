@@ -1,22 +1,22 @@
 package com.api.utils;
 
-import static io.restassured.RestAssured.*;
+import static com.api.constant.Role.ENG;
+import static com.api.constant.Role.FD;
+import static com.api.constant.Role.QC;
+import static com.api.constant.Role.SUP;
+import static io.restassured.RestAssured.given;
+import static org.hamcrest.Matchers.equalTo;
 
-import static org.hamcrest.Matchers.*;
-
-import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import static com.api.constant.Role.*;
-
 import com.api.constant.Role;
 import com.api.request.model.UserCredentials;
-import com.api.services.JobService;
 
+import io.qameta.allure.Step;
 import io.restassured.http.ContentType;
 
 public class AuthTokenProvider {
@@ -28,7 +28,7 @@ public class AuthTokenProvider {
 		
 	}
 	
-
+	@Step("Getting the Auth Token for the role")
 	public static String getToken(Role role) {
 		
 		LOGGER.info("Checking if the token for {} is present in the cache", role);
