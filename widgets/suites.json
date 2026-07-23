@@ -1,1 +1,1 @@
-{"total":1,"items":[{"uid":"c2a887f2c46e32fc10bcf8f0ef008c3c","name":"Phoenix API Test Suite","statistic":{"failed":7,"broken":2,"skipped":0,"passed":1,"unknown":0,"total":10}}]}
+{"total":1,"items":[{"uid":"c2a887f2c46e32fc10bcf8f0ef008c3c","name":"Phoenix API Test Suite","statistic":{"failed":4,"broken":2,"skipped":0,"passed":4,"unknown":0,"total":10}}]}
